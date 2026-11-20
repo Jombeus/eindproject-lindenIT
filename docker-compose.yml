@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gridwatch
+      POSTGRES_PASSWORD: gridwatch_pw
+      POSTGRES_DB: gridwatch
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gridwatch -d gridwatch"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: gridwatch
+      DB_USER: gridwatch
+      DB_PASSWORD: gridwatch_pw
+      SECRET_KEY: verander-mij-in-productie
+      LOG_DIR: /app/logs
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  db_data:

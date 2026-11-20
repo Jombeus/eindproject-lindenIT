@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Inloggen</h1>
+<form method="post" class="card narrow">
+  <label>Gebruikersnaam <input name="username" required autofocus autocomplete="off"></label>
+  <label>Wachtwoord <input name="password" type="password" required></label>
+  <button>Inloggen</button>
+</form>
+<p class="muted">Testaccounts: admin / Welkom2026! · operator / Operator2026! · viewer / Viewer2026!</p>
+{% endblock %}

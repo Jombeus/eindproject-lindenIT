@@ -1,0 +1,60 @@
+/* Kleuren: licht standaard, donker als de computer op donkere modus staat */
+:root {
+  --bg: #f3f5f8; --fg: #1b2430; --muted: #5b6878; --surface: #fff; --line: #e1e6ed; --th: #e8edf3;
+  --header: #12304d; --header-fg: #fff; --link: #9fd0ff; --accent: #1565c0; --accent-fg: #fff;
+  --flash: #fff3cd; --flash-fg: #5c4400;
+  --ok: #c8e6c9; --onderhoud: #ffe0b2; --storing: #ffcdd2; --offline: #cfd8dc; --badge-fg: #1b2430;
+  --code-bg: #0f1720; --code-fg: #d6e2f0;
+  --body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e141b; --fg: #dbe3ec; --muted: #93a1b2; --surface: #16202b; --line: #26323f; --th: #1c2834;
+    --header: #0a1f33; --flash: #3a3118; --flash-fg: #f5dfa0;
+    --ok: #2e5a33; --onderhoud: #6b4a1c; --storing: #6e2a2f; --offline: #3a4650; --badge-fg: #eef3f8;
+    --accent: #3d8be0; color-scheme: dark;
+  }
+}
+
+body { font-family: var(--body); font-size: 15px; margin: 0; background: var(--bg); color: var(--fg); }
+
+header { background: var(--header); color: var(--header-fg); padding: 12px 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+nav { display: flex; gap: 16px; flex: 1; flex-wrap: wrap; }
+nav a, header a { color: var(--link); text-decoration: none; }
+nav a:focus-visible, header a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.user { margin-left: auto; }
+
+main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+h1 { font-size: 1.6em; margin: 0 0 12px; }
+h2 { font-size: 1.15em; margin: 0 0 8px; }
+code { font-family: var(--mono); font-size: .92em; }
+.muted { color: var(--muted); font-size: 13px; }
+
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--surface); font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+th { background: var(--th); }
+
+.card { background: var(--surface); padding: 16px; margin: 16px 0; border-radius: 8px; box-shadow: 0 1px 3px #0002; }
+.narrow { max-width: 360px; }
+
+label { display: block; margin: 8px 0; }
+input, select, textarea {
+  display: block; width: 100%; padding: 6px; box-sizing: border-box; font: inherit;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 4px;
+}
+button { background: var(--accent); color: var(--accent-fg); border: 0; padding: 8px 16px; border-radius: 4px; cursor: pointer; font: inherit; }
+button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+.flash { background: var(--flash); color: var(--flash-fg); padding: 10px; border-radius: 4px; margin-bottom: 12px; }
+
+.badge { padding: 2px 8px; border-radius: 10px; font-size: .85em; background: var(--offline); color: var(--badge-fg); }
+.ok { background: var(--ok); }
+.onderhoud { background: var(--onderhoud); }
+.storing { background: var(--storing); }
+.offline { background: var(--offline); }
+
+pre.json { background: var(--code-bg); color: var(--code-fg); padding: 12px; border-radius: 6px; overflow: auto; font-family: var(--mono); font-size: 12px; max-height: 260px; margin: 8px 0 0; }

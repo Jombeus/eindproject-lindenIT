@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Scenario's</h1>
+<p>Alles wordt gelogd in <code>logs/app.log</code>.</p>
+
+<div class="card">
+  <h2>Scenario 2 – Meerdere foute wachtwoorden</h2>
+  <p style="margin:0 0 8px">Net als <code>scenario2_foute_logins.sh</code>: 8 foute wachtwoorden voor admin.</p>
+  <button type="button" id="brute">Start</button> <span id="brutestatus"></span>
+</div>
+
+<div class="card">
+  <h2>Scenario 3 – Veel API-verkeer</h2>
+  <label>Aantal verzoeken <input id="n" type="number" value="40" min="1" max="500"></label>
+  <button type="button" id="flood">Start</button> <span id="floodstatus"></span>
+</div>
+
+<div class="card">
+  <h2>Scenario 4 – Applicatiefout</h2>
+  <form method="post" action="{{ url_for('scenario_fout') }}">
+    <button>Genereer foutmelding</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Extra – Hoge belasting</h2>
+  <form method="post" action="{{ url_for('scenario_belasting') }}">
+    <button>Genereer 1000 sensorrecords</button>
+  </form>
+</div>
+
+<script>
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+document.getElementById('brute').addEventListener('click', async function () {
+  const out = document.getElementById('brutestatus');
+  const pws = ['welkom123', 'test123', 'admin123', 'password', 'qwerty', '123456', 'letmein', 'admin'];
+  for (let i = 0; i < pws.length; i++) {
+    const body = new URLSearchParams({ username: 'admin', password: pws[i] });
+    // X-Scenario: de app logt de poging, maar zet geen melding op het scherm
+    await fetch('/login', { method: 'POST', body: body, headers: { 'X-Scenario': '1' } });
+    out.textContent = (i + 1) + '/' + pws.length;
+    await wait(300);
+  }
+  out.textContent += ' klaar';
+});
+
+document.getElementById('flood').addEventListener('click', async function () {
+  const n = Math.max(1, Math.min(500, parseInt(document.getElementById('n').value) || 40));
+  const out = document.getElementById('floodstatus');
+  for (let i = 1; i <= n; i++) {
+    await fetch('/api/stations');
+    out.textContent = i + '/' + n;
+  }
+  out.textContent += ' klaar';
+});
+</script>
+{% endblock %}

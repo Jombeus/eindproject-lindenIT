@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Transformatorstations</h1>
+<div class="tablewrap">
+<table>
+  <tr><th>ID</th><th>Naam</th><th>Locatie</th><th>Status</th><th>Vermogen (MW)</th><th>Temperatuur (°C)</th></tr>
+  {% for s in stations %}
+  <tr>
+    <td>{{ s.id }}</td><td>{{ s.naam }}</td><td>{{ s.locatie }}</td>
+    <td><span class="badge {{ s.status|lower }}">{{ s.status }}</span></td>
+    <td>{{ s.vermogen_mw if s.vermogen_mw is not none else '' }}</td>
+    <td>{{ s.temperatuur if s.temperatuur is not none else '' }}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+
+<div class="card">
+  <h2>API testen</h2>
+  <div class="row">
+    {% for p in ['/api/stations', '/api/station/1', '/api/station/999', '/api/alerts', '/api/sensor-data?limit=5', '/api/grid-health'] %}
+    <button type="button" class="ghost" data-api="{{ p }}">{{ p }}</button>
+    {% endfor %}
+  </div>
+  <pre class="json" id="apiout" hidden></pre>
+</div>
+
+<script>
+document.querySelectorAll('[data-api]').forEach(function (b) {
+  b.addEventListener('click', async function () {
+    const out = document.getElementById('apiout');
+    out.hidden = false;
+    out.textContent = 'Bezig...';
+    try {
+      const r = await fetch(b.dataset.api);
+      const data = await r.json();
+      out.textContent = 'HTTP ' + r.status + '\n' + JSON.stringify(data, null, 2);
+    } catch (e) {
+      out.textContent = 'Fout: ' + e;
+    }
+  });
+});
+</script>
+{% endblock %}
